@@ -7,4 +7,5 @@ package com.phgarcia.desafioandroid.util;
 public abstract class Constants {
     public static final String FETCH_WEBSERVICE = "https://dl.dropboxusercontent.com/s/50vmlj7dhfaibpj/sociais.json";
     public static final String FETCH_MAIN_ARRAY_NAME = "acoes_sociais";
+    public static final String FETCH_SAVE_DIRECTORY = "saved_images";
 }

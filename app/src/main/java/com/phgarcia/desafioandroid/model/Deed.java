@@ -11,6 +11,7 @@ public class Deed implements Serializable{
     private Long id;
     private String name;
     private String imageURL;
+    private String imagePath;
     private String description;
     private String site;
 
@@ -19,7 +20,7 @@ public class Deed implements Serializable{
     public Deed (Long id, String name, String imageURL, String description, String site) {
         this.setId(id);
         this.setName(name);
-        this.setImageURL(imageURL);
+        this.setImagePath(imageURL);
         this.setDescription(description);
         this.setSite(site);
     }
@@ -27,12 +28,14 @@ public class Deed implements Serializable{
     public Long     getId()           { return id; }
     public String   getName()         { return name; }
     public String   getImageURL()     { return imageURL; }
+    public String   getImagePath()    { return imagePath; }
     public String   getDescription()  { return description; }
     public String   getSite()         { return site; }
 
     public void setId(Long id)                      { this.id = id; }
     public void setName(String name)                { this.name = name; }
     public void setImageURL(String imageURL)        { this.imageURL = imageURL; }
+    public void setImagePath(String imagePath)      { this.imagePath = imagePath; }
     public void setDescription(String description)  { this.description = description; }
     public void setSite(String site)                { this.site = site; }
 

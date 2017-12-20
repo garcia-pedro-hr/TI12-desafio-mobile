@@ -28,7 +28,9 @@ public class DeedConverter {
                 js.key("id").value(deed.getId());
                 js.key("name").value(deed.getName());
                 js.key("imageURL").value(deed.getImageURL());
+                // imagePath not sent because it is too specific
                 js.key("description").value(deed.getDescription());
+                js.key("site").value(deed.getSite());
                 js.endObject();
             }
 

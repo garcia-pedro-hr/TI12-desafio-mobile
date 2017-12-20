@@ -24,20 +24,19 @@ public class DeedDAO extends SQLiteOpenHelper {
     private SQLiteDatabase readable;
 
     public DeedDAO(Context context) {
-        super(context, "DesafioAndroid", null, 1);
+        super(context, "DesafioAndroid", null, 2);
         this.writable = getWritableDatabase();
         this.readable = getReadableDatabase();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE" + TABLE_NAME + "(id INTEGER PRIMARY KEY, name TEXT NOT NULL, imageURL TEXT, description TEXT, site TEXT);");
+        db.execSQL("CREATE TABLE " + TABLE_NAME + " (id INTEGER PRIMARY KEY, name TEXT NOT NULL, imageURL TEXT, imagePath TEXT, description TEXT, site TEXT);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME + ";");
-        onCreate(db);
+        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN imagePath TEXT;");
     }
 
     public void resetTable() {
@@ -77,6 +76,7 @@ public class DeedDAO extends SQLiteOpenHelper {
             deed.setId(c.getLong(c.getColumnIndex("id")));
             deed.setName(c.getString(c.getColumnIndex("name")));
             deed.setImageURL(c.getString(c.getColumnIndex("imageURL")));
+            deed.setImagePath(c.getString(c.getColumnIndex("imagePath")));
             deed.setDescription(c.getString(c.getColumnIndex("description")));
             deed.setSite(c.getString(c.getColumnIndex("site")));
 
@@ -94,6 +94,7 @@ public class DeedDAO extends SQLiteOpenHelper {
         data.put("id", deed.getId());
         data.put("name", deed.getName());
         data.put("imageURL", deed.getImageURL());
+        data.put("imagePath", deed.getImagePath());
         data.put("description", deed.getDescription());
         data.put("site", deed.getSite());
 

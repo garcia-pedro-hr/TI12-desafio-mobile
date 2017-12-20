@@ -1,6 +1,14 @@
 package com.phgarcia.desafioandroid.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -20,6 +28,8 @@ import com.phgarcia.desafioandroid.task.FetchDeedsTask;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 112;
 
     private ListView deedsListView;
 
@@ -77,10 +87,33 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_main_update:
-                new FetchDeedsTask(this, deedsListView).execute();
+                // check permission to write to external storage
+                boolean hasExternalWritePermission = (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED);
+
+                if (!hasExternalWritePermission) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+                } else {
+                    new FetchDeedsTask(this, deedsListView).execute();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode)
+        {
+            case REQUEST_WRITE_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    new FetchDeedsTask(this, deedsListView).execute();
+                } else {
+                    Toast.makeText(MainActivity.this, "O aplicativo não foi permitido escrever no armazenamento de seu dispositivo. Desta forma, não funcionando corretamente. Por favor considere conceder a permissão.", Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
     }
 
     private void loadDeedListView() {
