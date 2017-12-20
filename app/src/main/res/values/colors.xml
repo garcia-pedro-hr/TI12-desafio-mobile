@@ -5,4 +5,6 @@
     <color name="colorAccent">#2CA9B2</color>
     <color name="colorAlternativeAccent">#A63446</color>
     <color name="colorBackground">#F2FCFF</color>
+    <color name="colorEvenRow">#EDEDED</color>
+    <color name="colorOddRow">#E8E8E8</color>
 </resources>

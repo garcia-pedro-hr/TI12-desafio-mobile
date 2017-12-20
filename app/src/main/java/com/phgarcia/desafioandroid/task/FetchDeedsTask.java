@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.phgarcia.desafioandroid.R;
+import com.phgarcia.desafioandroid.activity.MainActivity;
 import com.phgarcia.desafioandroid.converter.DeedConverter;
 import com.phgarcia.desafioandroid.dao.DeedDAO;
 import com.phgarcia.desafioandroid.model.Deed;
@@ -92,8 +93,8 @@ public class FetchDeedsTask extends AsyncTask<Object, Object, List<Deed>> {
         dialog.dismiss();
 
         // Update deedsListView from MainActivity
-        ArrayAdapter<Deed> adapter = new ArrayAdapter<Deed>(context, android.R.layout.simple_list_item_1, response);
-        this.deedsListView.setAdapter(adapter);
+        MainActivity activity = (MainActivity) context;
+        activity.loadDeedListView();
 
         Toast.makeText(context, "Atualizado!", Toast.LENGTH_LONG).show();
     }

@@ -1,12 +1,13 @@
 package com.phgarcia.desafioandroid.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +16,11 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.phgarcia.desafioandroid.R;
@@ -25,6 +28,8 @@ import com.phgarcia.desafioandroid.dao.DeedDAO;
 import com.phgarcia.desafioandroid.model.Deed;
 import com.phgarcia.desafioandroid.task.FetchDeedsTask;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,6 +65,18 @@ public class MainActivity extends AppCompatActivity {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         final Deed deed = (Deed) deedsListView.getItemAtPosition(info.position);
+
+        // Context Menu Visit Website Button
+        MenuItem site = menu.add("Visitar Website");
+        Intent intentSite = new Intent(Intent.ACTION_VIEW);
+
+        String uriString = deed.getSite();
+        if (!uriString.startsWith("http://")) {
+            uriString = "http://" + uriString;
+        }
+
+        intentSite.setData(Uri.parse(uriString));
+        site.setIntent(intentSite);
 
         // Context Menu Delete Button
         MenuItem deleteItem = menu.add("Deletar");
@@ -116,12 +133,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadDeedListView() {
+    public void loadDeedListView() {
         DeedDAO dao = new DeedDAO(this);
         List<Deed> deeds = dao.list();
         dao.close();
 
-        ArrayAdapter<Deed> adapter = new ArrayAdapter<Deed>(this, android.R.layout.simple_list_item_1, deeds);
+        // sort
+        Collections.sort(deeds, new Comparator<Deed>() {
+            @Override
+            public int compare(Deed a, Deed b) {
+                return a.getName().compareTo(b.getName());
+            }
+        });
+
+        ArrayAdapter<Deed> adapter = new ArrayAdapter<Deed>(this, R.layout.deed_list_item, R.id.deed_list_item, deeds) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+
+                // Change font
+                TextView textView = (TextView) view.findViewById(R.id.deed_list_item);
+                textView.setTypeface(typeface);
+
+
+                // Color rows differently
+                if (position % 2 == 1) view.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorOddRow));
+                else view.setBackgroundColor(Color.WHITE);
+
+
+                return view;
+            }
+        };
         deedsListView.setAdapter(adapter);
     }
 }

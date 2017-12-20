@@ -17,7 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
-            android:paddingBottom="15dp"/>
+            android:paddingBottom="15dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"/>
 
         <TextView
             android:id="@+id/deed_name"
@@ -29,7 +31,8 @@
             android:textSize="22dp"
             android:textColor="@color/colorPrimaryDark"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="10dp"
+            android:textStyle="bold"/>
 
         <com.codesgood.views.JustifiedTextView
             android:id="@+id/deed_description"
@@ -48,7 +51,7 @@
             android:layout_below="@+id/deed_description"
             android:layout_alignParentRight="true"
             android:text="Visitar Website"
-            android:textColor="@color/colorAlternativeAccent"
+            android:textColor="@color/colorAccent"
             style="?android:attr/borderlessButtonStyle"/>
 
     </RelativeLayout>
