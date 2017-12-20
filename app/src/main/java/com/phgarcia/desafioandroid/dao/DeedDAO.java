@@ -18,39 +18,57 @@ import java.util.List;
 
 public class DeedDAO extends SQLiteOpenHelper {
 
+    private final String TABLE_NAME = "deeds";
+
+    private SQLiteDatabase writable;
+    private SQLiteDatabase readable;
+
     public DeedDAO(Context context) {
         super(context, "DesafioAndroid", null, 1);
+        this.writable = getWritableDatabase();
+        this.readable = getReadableDatabase();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE Deeds (id INTEGER PRIMARY KEY, name TEXT NOT NULL, imageURL TEXT, description TEXT, site TEXT);");
+        db.execSQL("CREATE TABLE" + TABLE_NAME + "(id INTEGER PRIMARY KEY, name TEXT NOT NULL, imageURL TEXT, description TEXT, site TEXT);");
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS Deeds;");
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME + ";");
         onCreate(db);
     }
 
+    public void resetTable() {
+        this.writable.execSQL("delete from " + TABLE_NAME + ";");
+    }
+
     public void insert(Deed deed) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.insert("Deeds", null, getData(deed));
+        this.writable.insert(TABLE_NAME, null, getData(deed));
     }
 
     public void delete(Deed deed) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete("Deeds", "id = ?", new String[] {deed.getId().toString()});
+        this.writable.delete(TABLE_NAME, "id = ?", new String[] {deed.getId().toString()});
     }
 
     public void update(Deed deed) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.update("Deeds", getData(deed), "id = ?", new String[] {deed.getId().toString()});
+        this.writable.update(TABLE_NAME, getData(deed), "id = ?", new String[] {deed.getId().toString()});
+    }
+
+    public void save(Deed deed) {
+        // Update if row with same id already exists
+        // Insert otherwise
+        Cursor cursor = this.readable.rawQuery("SELECT id FROM " + TABLE_NAME + " WHERE id = ?", new String[] {deed.getId().toString()});
+
+        if (cursor.getCount() > 0) update(deed);
+        else insert(deed);
+
+        cursor.close();
     }
 
     public List<Deed> list() {
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM Deeds", null);
+        Cursor c = this.readable.rawQuery("SELECT * FROM Deeds", null);
         List<Deed> deedsList = new ArrayList<Deed> ();
 
         while (c.moveToNext()) {
@@ -58,9 +76,9 @@ public class DeedDAO extends SQLiteOpenHelper {
 
             deed.setId(c.getLong(c.getColumnIndex("id")));
             deed.setName(c.getString(c.getColumnIndex("name")));
-            deed.setName(c.getString(c.getColumnIndex("imageURL")));
-            deed.setName(c.getString(c.getColumnIndex("description")));
-            deed.setName(c.getString(c.getColumnIndex("site")));
+            deed.setImageURL(c.getString(c.getColumnIndex("imageURL")));
+            deed.setDescription(c.getString(c.getColumnIndex("description")));
+            deed.setSite(c.getString(c.getColumnIndex("site")));
 
             deedsList.add(deed);
         }

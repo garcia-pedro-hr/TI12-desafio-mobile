@@ -1,10 +1,12 @@
 package com.phgarcia.desafioandroid.model;
 
+import java.io.Serializable;
+
 /**
  * Created by garci on 12/19/2017.
  */
 
-public class Deed {
+public class Deed implements Serializable{
 
     private Long id;
     private String name;
@@ -33,4 +35,6 @@ public class Deed {
     public void setImageURL(String imageURL)        { this.imageURL = imageURL; }
     public void setDescription(String description)  { this.description = description; }
     public void setSite(String site)                { this.site = site; }
+
+    public String toString()  { return this.name; }
 }
