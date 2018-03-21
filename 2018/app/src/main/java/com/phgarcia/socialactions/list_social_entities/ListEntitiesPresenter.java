@@ -31,9 +31,11 @@ public class ListEntitiesPresenter {
             view.updateList(entityList);
         } else {
             final SocialActionsApi api = SocialActionsApi.getInstance();
+            view.showLoading();
             api.getSocialEntities().enqueue(new Callback<SocialEntityList>() {
                 @Override
                 public void onResponse(Call<SocialEntityList> call, Response<SocialEntityList> response) {
+                    view.hideLoading();
                     socialEntityList = response.body();
 
                     if (socialEntityList != null) {
@@ -46,17 +48,14 @@ public class ListEntitiesPresenter {
 
                 @Override
                 public void onFailure(Call<SocialEntityList> call, Throwable t) {
+                    view.hideLoading();
                     view.showMessage("Falha no acesso ao servidor");
                 }
             });
         }
     }
 
-    long getEntityId(int position) throws IndexOutOfBoundsException {
-        return entityList.get(position).getId();
-    }
-
-    String getEntityWebsite(int position) throws IndexOutOfBoundsException {
-        return entityList.get(position).getWebsite();
+    SocialEntity getEntity(int position) throws IndexOutOfBoundsException {
+        return entityList.get(position);
     }
 }

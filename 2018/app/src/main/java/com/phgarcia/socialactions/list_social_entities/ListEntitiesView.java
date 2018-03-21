@@ -8,5 +8,7 @@ interface ListEntitiesView {
 
     void updateList(List<SocialEntity> socialEntityList);
     void showMessage(String message);
+    void showLoading();
+    void hideLoading();
 
 }

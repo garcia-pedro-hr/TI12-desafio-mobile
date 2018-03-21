@@ -56,19 +56,13 @@ class ListEntitiesAdapter extends RecyclerView.Adapter<ListEntitiesAdapter.ViewH
     }
 
     // ViewHolder Class Implementation
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_entity_name) TextView tvEntityName;
         @BindView(R.id.iv_background) ImageView ivBackground;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnCreateContextMenuListener(this);
             ButterKnife.bind(this, itemView);
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.add(0, view.getId(), 0, context.getString(R.string.menu_website));
         }
 
         @OnClick(R.id.container)

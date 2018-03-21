@@ -2,13 +2,13 @@ package com.phgarcia.socialactions.list_social_entities;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.phgarcia.socialactions.R;
@@ -22,7 +22,8 @@ import butterknife.ButterKnife;
 
 public class ListEntitiesActivity extends AppCompatActivity implements ListEntitiesView {
 
-    @BindView(R.id.rv_social_entities_list) RecyclerView rvEntitites;
+    @BindView(R.id.rv_social_entities_list) RecyclerView rvEntities;
+    @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     ListEntitiesPresenter presenter;
 
@@ -35,8 +36,16 @@ public class ListEntitiesActivity extends AppCompatActivity implements ListEntit
         presenter = new ListEntitiesPresenter(this);
 
         // Checks if there is a json to be loaded
-        String json = getIntent().getStringExtra("json");
-        presenter.updateList(json);
+        presenter.updateList(getIntent().getStringExtra("json"));
+
+        // Swipe refresh layout refresh logic
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Method calls setRefreshing(false) when it's finished
+                presenter.updateList(getIntent().getStringExtra("json"));
+            }
+        });
     }
 
     @Override
@@ -47,26 +56,44 @@ public class ListEntitiesActivity extends AppCompatActivity implements ListEntit
             @Override
             public void onClick(View view, int position) {
                 Intent openDetailActivity = new Intent(ListEntitiesActivity.this, SocialEntityDetailsActivity.class);
-                openDetailActivity.putExtra("ID", presenter.getEntityId(position));
+                openDetailActivity.putExtra("ENTITY_NAME", presenter.getEntity(position).getName());
+                openDetailActivity.putExtra("ENTITY_DESCRIPTION", presenter.getEntity(position).getDescription());
+                openDetailActivity.putExtra("ENTITY_WEBSITE", presenter.getEntity(position).getWebsite());
+                openDetailActivity.putExtra("ENTITY_COVER_IMAGE", presenter.getEntity(position).getCoverImageURL());
                 startActivity(openDetailActivity);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                Intent openUrlInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(presenter.getEntityWebsite(position)));
+                Intent openUrlInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(presenter.getEntity(position).getWebsite()));
                 startActivity(openUrlInBrowser);
             }
         });
 
-        rvEntitites.setAdapter(adapter);
+        rvEntities.setAdapter(adapter);
 
         // Layout manager setting
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        rvEntitites.setLayoutManager(layoutManager);
+        rvEntities.setLayoutManager(layoutManager);
 
         // Adding item separator
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, layoutManager.getOrientation());
-        rvEntitites.addItemDecoration(dividerItemDecoration);
+        rvEntities.addItemDecoration(dividerItemDecoration);
+
+        // Stop refreshing if it is refreshing
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void showLoading() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

@@ -3,11 +3,8 @@ package com.phgarcia.socialactions.network.api;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.phgarcia.socialactions.entities.SocialEntity;
 import com.phgarcia.socialactions.entities.SocialEntityList;
 import com.phgarcia.socialactions.network.service.SocialActionsService;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Converter;
@@ -44,4 +41,5 @@ public class SocialActionsApi {
     public Call<SocialEntityList> getSocialEntities() {
         return service.getSocialEntities();
     }
+
 }
