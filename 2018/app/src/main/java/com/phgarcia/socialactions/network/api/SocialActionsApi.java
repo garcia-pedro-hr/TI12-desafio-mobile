@@ -42,4 +42,8 @@ public class SocialActionsApi {
         return service.getSocialEntities();
     }
 
+    public Call<String> getSocialEntitiesJson() {
+        return service.getSocialEntitiesJson();
+    }
+
 }

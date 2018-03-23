@@ -1,6 +1,7 @@
 package com.phgarcia.socialactions.list_social_entities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,14 +38,15 @@ public class ListEntitiesActivity extends AppCompatActivity implements ListEntit
         presenter = new ListEntitiesPresenter(this);
 
         // Checks if there is a json to be loaded
-        presenter.updateList(getIntent().getStringExtra("json"));
+        String json = getIntent().getStringExtra(getString(R.string.entities_json));
+        presenter.updateEntityList(json);
 
         // Swipe refresh layout refresh logic
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Method calls setRefreshing(false) when it's finished
-                presenter.updateList(getIntent().getStringExtra("json"));
+                presenter.downloadEntitiesInformation();
             }
         });
     }
@@ -85,6 +87,13 @@ public class ListEntitiesActivity extends AppCompatActivity implements ListEntit
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void saveEntitiesInformationInSharedPreferences(String json) {
+        SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.entities), MODE_PRIVATE).edit();
+        editor.putString(getString(R.string.entities_json), json);
+        editor.apply();
     }
 
     @Override

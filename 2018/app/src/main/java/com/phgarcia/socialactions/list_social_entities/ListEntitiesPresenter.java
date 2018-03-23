@@ -7,6 +7,7 @@ import com.phgarcia.socialactions.entities.SocialEntity;
 import com.phgarcia.socialactions.entities.SocialEntityList;
 import com.phgarcia.socialactions.network.api.SocialActionsApi;
 
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,36 +24,40 @@ public class ListEntitiesPresenter {
         this.view = view;
     }
 
-    void updateList(String json) {
-        // Check if there is information on the JSON provided
-        if (json != null) {
-            socialEntityList = new Gson().fromJson(json, SocialEntityList.class);
-            entityList = socialEntityList.getEntities();
-            view.updateList(entityList);
-        } else {
-            final SocialActionsApi api = SocialActionsApi.getInstance();
-            view.showLoading();
-            api.getSocialEntities().enqueue(new Callback<SocialEntityList>() {
-                @Override
-                public void onResponse(Call<SocialEntityList> call, Response<SocialEntityList> response) {
-                    view.hideLoading();
-                    socialEntityList = response.body();
+    void downloadEntitiesInformation() {
+        final SocialActionsApi api = SocialActionsApi.getInstance();
+        view.showLoading();
+        api.getSocialEntities().enqueue(new Callback<SocialEntityList>() {
+            @Override
+            public void onResponse(Call<SocialEntityList> call, Response<SocialEntityList> response) {
+                view.hideLoading();
+                socialEntityList = response.body();
 
-                    if (socialEntityList != null) {
-                        entityList = socialEntityList.getEntities();
-                        view.updateList(entityList);
-                    } else {
-                        view.showMessage("Falha ao carregar a lista de Entidades Sociais");
-                    }
+                if (socialEntityList != null) {
+                    entityList = socialEntityList.getEntities();
+                    view.updateList(entityList);
+                    saveEntitiesInformationInSharedPreferences();
+                } else {
+                    view.showMessage("Falha ao carregar a lista de Entidades Sociais");
                 }
+            }
 
-                @Override
-                public void onFailure(Call<SocialEntityList> call, Throwable t) {
-                    view.hideLoading();
-                    view.showMessage("Falha no acesso ao servidor");
-                }
-            });
-        }
+            @Override
+            public void onFailure(Call<SocialEntityList> call, Throwable t) {
+                view.hideLoading();
+                view.showMessage("Falha no acesso ao servidor");
+            }
+        });
+    }
+
+    void updateEntityList(String json) {
+        entityList = Arrays.asList(new Gson().fromJson(json, SocialEntity[].class));
+        view.updateList(entityList);
+    }
+
+    void saveEntitiesInformationInSharedPreferences() {
+        String json = new Gson().toJson(entityList);
+        view.saveEntitiesInformationInSharedPreferences(json);
     }
 
     SocialEntity getEntity(int position) throws IndexOutOfBoundsException {

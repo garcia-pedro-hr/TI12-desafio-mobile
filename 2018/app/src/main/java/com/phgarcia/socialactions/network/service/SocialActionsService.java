@@ -11,4 +11,6 @@ public interface SocialActionsService {
     @GET("s/f39meuzbspdlrhl/sociais")
     Call<SocialEntityList> getSocialEntities();
 
+    @GET("s/f39meuzbspdlrhl/sociais")
+    Call<String> getSocialEntitiesJson();
 }

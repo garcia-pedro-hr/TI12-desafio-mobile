@@ -5,70 +5,76 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <android.support.design.widget.CoordinatorLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iv_entity_details_header"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:contentDescription="@null" />
+                android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/iv_entity_details_header"
-                android:contentDescription="@null"
-                android:src="@drawable/sombra_detalhes"
-                android:scaleType="fitXY" />
+                <ImageView
+                    android:id="@+id/iv_entity_details_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:contentDescription="@null" />
 
-            <TextView
-                android:id="@+id/tv_entity_details_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/iv_entity_details_header"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="15dp"
-                android:fontFamily="sans-serif-medium"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="19sp" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/iv_entity_details_header"
+                    android:contentDescription="@null"
+                    android:src="@drawable/sombra_detalhes"
+                    android:scaleType="fitXY" />
 
-            <TextView
-                android:id="@+id/tv_entity_details_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_entity_details_name"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="15dp"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tv_entity_details_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_entity_details_header"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="19sp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_entity_details_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_entity_details_name"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_go_to_website"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_open_in_browser_white_24dp"
-            app:layout_anchor="@id/iv_entity_details_header"
-            app:layout_anchorGravity="bottom|right|end"
-            app:rippleColor="#FFF"
-            app:borderWidth="0dp"
-            app:elevation="12dp"/>
+            </RelativeLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_go_to_website"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="16dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_open_in_browser_white_24dp"
+                app:layout_anchor="@id/iv_entity_details_header"
+                app:layout_anchorGravity="bottom|right|end"
+                app:rippleColor="#FFF"
+                app:borderWidth="0dp"
+                app:elevation="12dp"/>
+
+        </android.support.design.widget.CoordinatorLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SocialActions</string>
-    <string name="menu_website">Access website</string>
+    <string name="entities">entities</string>
+    <string name="entities_json">entities_json</string>
 </resources>

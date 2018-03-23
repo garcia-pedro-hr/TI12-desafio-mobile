@@ -10,5 +10,6 @@ interface ListEntitiesView {
     void showMessage(String message);
     void showLoading();
     void hideLoading();
+    void saveEntitiesInformationInSharedPreferences(String json);
 
 }
